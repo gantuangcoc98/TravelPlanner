@@ -2,7 +2,15 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>{% block title %}Travel Planner{% endblock %}</title>
+        <title>
+            {% block title %}
+                {% if request.session.admin_validated %}
+                    Travel Planner - Admin
+                {% else %}
+                    Travel Planner
+                {% endif %}
+            {% endblock %}
+        </title>
         {% load static %}
         <link rel="stylesheet" href="{% static 'style.css' %}">
         <link rel="icon" href="{% static 'img/website_icon.png' %}">
@@ -11,23 +19,28 @@
         <div class="wrapper">
             <header>
                 <div class="title_container">
-                    <img src="{% static 'img/flight.png' %}" alt="airplane" width="30px" height="auto">
-                    <a href="{% url 'UserRegistration:home' %}">Travel Planner</a>
+                    {% if request.session.admin_validated %}
+                        <img src="{% static 'img/settings.jpg' %}" alt="airplane" width="30px" height="auto">
+                        <a href="{% url 'UserRegistration:home' %}">Admin Log</a>
+                    {% else %}
+                        <img src="{% static 'img/flight.png' %}" alt="airplane" width="30px" height="auto">
+                        <a href="{% url 'UserRegistration:home' %}">Travel Planner</a>
+                    {% endif %}
                 </div>
 
                 {% block nav %}
                     {% if request.session.user_validated %}
                         <nav class="tabs">
                             <a href="{% url 'UserRegistration:my_account' %}">My Account</a>
-                            <a href="">My Bookings</a>
+                            <a href="{% url 'UserRegistration:my_account' %}">My Bookings</a>
                             <a href="{% url 'UserRegistration:my_wishlist' %}">Wishlist</a>
                             <a href="{% url 'UserRegistration:sign_out' %}">Sign Out</a>
                         </nav>
                     {% elif request.session.admin_validated %}
                         <nav class="tabs">
-                            <a href="{% url 'UserRegistration:manage_bookings' %}">Manage Bookings</a>
+                            <a href="{% url 'UserRegistration:manage_bookings' %}">Bookings</a>
+                            <a href="{% url 'UserRegistration:manage_destinations' %}">Destinations</a>
                             <a href="{% url 'UserRegistration:my_account' %}">My Account</a>
-                            <a href="{% url 'UserRegistration:my_wishlist' %}">Wishlist</a>
                             <a href="{% url 'UserRegistration:sign_out' %}">Sign Out</a>
                         </nav>
                     {% else %}

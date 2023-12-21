@@ -75,6 +75,13 @@ form .submit_button {
     background-color: #2e9671;
 }
 
+.section_admin_menu {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
 body {
     font-family: 'Open Sans';
     color: black;
@@ -187,6 +194,12 @@ main {
 
 .section_recommendation .details p {
     font-size: 20px;
+}
+
+.section_manage_destinations {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 .desination_list ul {

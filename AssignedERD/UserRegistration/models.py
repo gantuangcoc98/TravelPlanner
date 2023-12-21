@@ -10,7 +10,7 @@ class Destination(models.Model):
 
     def __str__(self):
         return self.destination_name
-    
+
 class User(models.Model):
     USER_TYPE_CHOICES = (
         (0, 'User'),
@@ -41,4 +41,18 @@ class User(models.Model):
             return True
         else:
             return False
-        
+
+class BookOrder(models.Model):
+    VERIFICATION = (
+        (0, 'Pending'),
+        (1, 'Approved'),
+        (2, 'Declined'),
+    )
+
+    book_id = models.BigAutoField(primary_key=True)
+    destination_id = models.ForeignKey(Destination, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    is_approved = models.BooleanField(choices=VERIFICATION, default=0)
+
+    def __str__(self):
+        return str(self.book_id)

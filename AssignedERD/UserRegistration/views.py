@@ -121,7 +121,18 @@ def manage_bookings(request):
     admin = User.objects.get(user_id=request.session.get('admin_id'))
     
     return render(request, 'manage_bookings.html', {'admin':admin})    
-    
+
+def manage_destinations(request):
+    destination = Destination.objects.all()
+    admin = User.objects.get(user_id=request.session.get('admin_id'))
+
+    context = {
+        'admin': admin,
+        'destination': destination,
+    }
+
+    return render(request, 'manage_destinations.html', context)
+
 def display_destination(request, destination_id):
     destination = get_object_or_404(Destination, pk=destination_id)
     request.session['destination_id'] = destination.destination_id

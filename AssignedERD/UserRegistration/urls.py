@@ -13,4 +13,5 @@ urlpatterns = [
     path('my_wishlist/', views.display_wishlist, name='my_wishlist'),
     path('add_wishlist/', views.add_wishlist, name='add_wishlist'),
     path('manage_bookings/', views.manage_bookings, name='manage_bookings'),
+    path('manage_destinations/', views.manage_destinations, name='manage_destinations'),
 ]
