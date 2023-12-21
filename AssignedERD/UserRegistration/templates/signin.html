@@ -1,0 +1,32 @@
+{% extends "header.html" %}
+{% load static %}
+
+{% block title %}Travel Planner - Sign In{% endblock %}
+{% block content %}
+    <section class="section_signin">
+        {% if request.session.user_validated == False %}
+            <h3> Incorrect username or password, please try again. </h3>
+
+        {% elif request.session.registered == False %}
+            <h3> Not yet registered. <a href="{% url 'UserRegistration:register' %}">Register here</a></h3>
+
+        {% endif %}
+
+        <form method="POST" action="">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="{{ form.username.id_for_label }}">Username</label>
+                {{ form.username }}
+            </div>
+        
+            <div class="form-group">
+                <label for="{{ form.password.id_for_label }}">Password</label>
+                {{ form.password }}
+            </div>
+        
+            <div class="submit_button">
+                <button type="submit">Sign In</button>
+            </div>
+        </form>
+    </section>
+{% endblock %}

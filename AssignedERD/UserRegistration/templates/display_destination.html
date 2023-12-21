@@ -1,0 +1,22 @@
+{% extends "header.html" %}
+{% load static %} 
+
+{% block title %}Destination{% endblock %}
+{% block content %}
+    <section class="destination">
+        <div class="destination_container">
+            <img src="{{ destination.image.url }}">
+
+            <div class="destination_details">
+                <h1>{{ destination.destination_name }}</h1>
+                <p>{{ destination.description }}</p>
+                
+                {% if not in_wishlist %}
+                    <span class="button_container"><button id="add_to_wishlist" onclick="window.location.href='{% url 'UserRegistration:add_wishlist' %}'">Add to Wishlist</button></span>
+                {% else %}
+                    <h3>Added to wishlist. <a href="{% url 'UserRegistration:my_wishlist' %}">Browse Wishlist</a></h3>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+{% endblock %}

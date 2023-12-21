@@ -1,0 +1,45 @@
+{% extends "header.html" %}
+{% load static %}
+
+{% block content %}
+    <section class="section_booking">
+        <img src="{% static 'img/travels.png' %}" alt="travels" width="250px" height="auto">
+        <div class="details">
+            {% if request.session.user_validated %}
+            <h1>Hi {{ user.first_name }}, </h1>
+            {% endif %}
+            <h3>Explore the world with confidence and convenience.</h3>
+            <p>We don't believe in one-size-fits-all travel. We're committed to helping you 
+                create a trip that's as unique as you are. Whether you're an adventure seeker, 
+                a culture enthusiast, or a relaxation connoisseur, we have something special in 
+                store for you.
+            </p>
+            
+            <span class="button_container"><button id="button_book_now">Book Now</button></span>
+        </div>
+    </section>
+
+    <section class="section_recommendation">
+        <div class="details">
+            <h3>Because we recommend.</h3>
+            <p>We take pride in offering a wide range of curated itineraries, accommodation 
+                options, and must-see attractions that suit your individual travel style. Let us 
+                be your travel companion, helping you explore the world in a way that resonates 
+                with your heart and soul.
+            </p>
+        </div>
+
+        <div class="desination_list">
+            <ul>
+                {% for d in destination %}
+                <li onclick="window.location.href='destination/{{ d.destination_id }}'">
+                    <span class="img_container">
+                        <img src="{{ d.image.url }}">
+                    </span> 
+                    <h3>{{ d.destination_name }}</h3> 
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </section>
+{% endblock %}

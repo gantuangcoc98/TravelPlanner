@@ -1,0 +1,25 @@
+{% extends "header.html" %}
+{% load static %}
+
+{% block title %}My Wishlist{% endblock %}
+
+{% block content %}
+    <section class="my_wishlist">
+        <div class="wishlist_wrapper">
+            <h2>My Wishlist</h2>
+
+            <div class="desination_list">
+                <ul>
+                    {% for d in user.wishlist.all %}
+                    <li onclick="window.location.href='{% url 'UserRegistration:destination' d.destination_id %}'">
+                        <span class="img_container">
+                            <img src="{{ d.image.url }}">
+                        </span> 
+                        <h3>{{ d.destination_name }}</h3> 
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </section>
+{% endblock %}
