@@ -143,8 +143,29 @@ main {
 }
 
 .section_booking {
-    display: flex;
+    display: inherit;
     gap: 20px;
+}
+
+.section_my_bookings {
+    display: inherit;
+    flex-direction: inherit;
+    gap: 20px;
+}
+
+.section_my_bookings h3 {
+    font-weight: lighter;
+}
+
+.section_book_order {
+    display: inherit;
+    flex-direction: inherit;
+    gap: 20px;
+}
+
+.section_my_account {
+    display: inherit;
+    flex-direction: inherit;
 }
 
 .details {
@@ -202,14 +223,14 @@ main {
     gap: 20px;
 }
 
-.desination_list ul {
+.destination_list ul {
     list-style: none;
     display: flex;
     align-items: center;
     gap: 25px;
 }
 
-.desination_list li {
+.destination_list li {
     border: 2px solid black;
     display: inherit;
     flex-direction: column;
@@ -219,16 +240,16 @@ main {
     cursor: pointer;
 }
 
-.desination_list li:hover {
+.destination_list li:hover {
     background-color: #4c9b7e;
 }
 
-.desination_list .img_container {
+.destination_list .img_container {
     width: 200px;
     height: 250px;
 }
 
-.desination_list img {
+.destination_list img {
     height: inherit;
     width: inherit;
 }
@@ -256,12 +277,9 @@ main {
 }
 /* end of display_destination.html */
 
-
-
 /* my_wishlist.html */
 .wishlist_wrapper {
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
-/* end of my_wishlist.html */

@@ -21,7 +21,7 @@
                     store for you.
                 </p>
 
-                <span class="button_container"><button id="button_book_now">Book Now</button></span>
+                <span class="button_container"><button id="button_book_now" onclick="window.location.href='{% url 'UserRegistration:book_order'%}'">Book Now</button></span>
             </div>
         </section>
 
@@ -35,7 +35,7 @@
                 </p>
             </div>
 
-            <div class="desination_list">
+            <div class="destination_list">
                 <ul>
                     {% for d in destination %}
                     <li onclick="window.location.href='destination/{{ d.destination_id }}'">

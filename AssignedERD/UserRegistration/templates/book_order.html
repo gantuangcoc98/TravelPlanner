@@ -1,0 +1,23 @@
+{% extends "header.html" %}
+{% load static %}
+
+{% block title %}Book Order{% endblock %}
+{% block content %}
+    <section class="section_book_order">
+        <h3>Book Order</h3>
+
+        <div class="destination_list">
+            <ul>
+                {% for d in destination %}
+                <li onclick="window.location.href='/destination/{{ d.destination_id }}'">
+                    <span class="img_container">
+                        <img src="{{ d.image.url }}">
+                    </span>
+                    <h3>{{ d.destination_name }}</h3>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        </div>
+    </section>
+{% endblock %}

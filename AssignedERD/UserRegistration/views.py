@@ -1,7 +1,8 @@
 from django.shortcuts import get_object_or_404, render, redirect
-from .models import User, Destination
+from .models import User, Destination, BookOrder
 from .forms import UserLogin, UserRegistration
 from django.http import HttpResponse
+from django.db import connection
 
 # Create your views here.
 
@@ -16,8 +17,6 @@ def home(request):
         admin = User.objects.get(user_id=request.session.get('admin_id'))
     elif user_validated:
         user = User.objects.get(user_id=request.session.get('user_id'))
-    else:
-        request.session.clear()
     
     context = {
         'destination': destination,
@@ -59,7 +58,8 @@ def register(request):
 def sign_in(request):
     form = UserLogin()
     request.session['registered'] = None
-    
+    destination_id = request.session.get('destination_id', None)
+
     if request.method == 'POST':
         form = UserLogin(request.POST)
         
@@ -80,7 +80,9 @@ def sign_in(request):
                     request.session['user_id'] = user.user_id
 
                     if request.session.get('on_destination'):
-                        return redirect('/add_wishlist/')
+                        return redirect('/destination/' + str(destination_id))
+                    elif request.session.get('on_bookings'):
+                        return redirect('/book_order/')
                     else:
                         return redirect('/')
                 else:
@@ -116,11 +118,51 @@ def my_account(request):
     }
     
     return render(request, 'my_account.html', context)
-    
+
+def my_bookings(request):
+    user_id = request.session.get('user_id', None)
+    approved = None
+    pending = None
+    failed = None
+
+    if user_id is not None:
+        with connection.cursor() as cursor:
+            cursor.callproc('getOrders', [user_id])
+            results = cursor.fetchall()
+
+            bookings_with_status = [
+                {
+                    'destination': Destination(*row[:-1]),
+                    'status': row[-1]
+                }
+
+                for row in results
+            ]
+
+            approved = [
+                order['destination'] for order in bookings_with_status if order['status'] == 1
+            ]
+            pending = [
+                order['destination'] for order in bookings_with_status if order['status'] == 0
+            ]
+            failed = [
+                order['destination'] for order in bookings_with_status if order['status'] == 2
+            ]
+
+            context = {
+                'approved': approved,
+                'pending': pending,
+                'failed': failed,
+            }
+
+            return render(request, 'my_bookings.html', context)
+    else:
+        return redirect('/signin/')
+
 def manage_bookings(request):
     admin = User.objects.get(user_id=request.session.get('admin_id'))
     
-    return render(request, 'manage_bookings.html', {'admin':admin})    
+    return render(request, 'manage_bookings.html', {'admin': admin})
 
 def manage_destinations(request):
     destination = Destination.objects.all()
@@ -136,18 +178,16 @@ def manage_destinations(request):
 def display_destination(request, destination_id):
     destination = get_object_or_404(Destination, pk=destination_id)
     request.session['destination_id'] = destination.destination_id
-    
+    request.session['on_destination'] = True
+
     user = None
-    admin = None
     in_wishlist = None
-    
+
     if request.session.get('user_validated'):
         user = User.objects.get(user_id=request.session.get('user_id'))
         in_wishlist = destination in user.wishlist.all()
-    elif request.session.get('admin_validated'):
-        admin = User.objects.get(user_id=request.session.get('admin_id'))
-        in_wishlist = destination in admin.wishlist.all()
-        
+        request.session['in_bookings'] = BookOrder.objects.filter(user_id=user.user_id, destination_id=destination.destination_id).exists()
+
     context = {
         'destination': destination,
         'in_wishlist': in_wishlist
@@ -179,10 +219,59 @@ def add_wishlist(request):
         user.save()
         
         return redirect('/destination/' + str(destination.destination_id))
-    elif request.session.get('admin_validated'):
-        admin = User.objects.get(user_id=request.session.get('admin_id'))
-        admin.wishlist.add(destination)
-        admin.save()
     else:
-        request.session['on_destination'] = True
+        return redirect('/signin/')
+
+def add_book_order(request):
+    destination_id = request.session.get('destination_id')
+
+    if request.session.get('user_validated'):
+        user = User.objects.get(user_id=request.session.get('user_id'))
+        destination = Destination.objects.get(destination_id=destination_id)
+        book_order = BookOrder.objects.create(
+            user_id = user,
+            destination_id = destination
+        )
+
+        context = {
+            'book_order': book_order,
+        }
+
+        return redirect('/destination/' + str(destination_id))
+    else:
+        return redirect('/signin/')
+
+def edit_destination(request, destination_id):
+    admin = None
+
+    if request.session.get('admin_validated'):
+        admin = User.objects.get(user_id=request.session.get('admin_id'))
+    else:
+        return redirect('/signin/')
+
+    destination = get_object_or_404(Destination, pk=destination_id)
+    request.session['destination_id'] = destination.destination_id
+
+    context = {
+        'admin': admin,
+        'destination': destination,
+    }
+
+    return render(request, 'edit_destination.html', context)
+
+def book_order(request):
+    user = None
+    destination = Destination.objects.all()
+
+    if request.session.get('user_validated'):
+        user = User.objects.get(user_id=request.session.get('user_id'))
+
+        context = {
+            'user': user,
+            'destination': destination,
+        }
+
+        return render(request, 'book_order.html', context)
+    else:
+        request.session['on_bookings'] = True
         return redirect('/signin/')

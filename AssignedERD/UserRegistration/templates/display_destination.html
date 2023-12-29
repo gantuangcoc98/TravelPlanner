@@ -16,6 +16,12 @@
                 {% else %}
                     <h3>Added to wishlist. <a href="{% url 'UserRegistration:my_wishlist' %}">Browse Wishlist</a></h3>
                 {% endif %}
+
+                {% if request.session.in_bookings %}
+                    <h3>Added to bookings. <a href="{% url 'UserRegistration:my_bookings' %}">Browse Bookings</a></h3>
+                {% else %}
+                    <span class="button_container"><button id="button_book_now" onclick="window.location.href='{% url 'UserRegistration:add_book_order' %}'">Book Now</button></span>
+                {% endif %}
             </div>
         </div>
     </section>

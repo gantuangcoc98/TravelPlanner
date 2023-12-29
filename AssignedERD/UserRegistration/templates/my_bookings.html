@@ -1,0 +1,66 @@
+{% extends "header.html" %}
+{% load static %}
+
+{% block title %}
+    My Bookings
+{% endblock %}
+
+{% block content %}
+    <section class="section_my_bookings">
+        <h2>My Bookings</h2>
+
+        <h3>Approved</h3>
+        {% if approved is not None %}
+            <div class="destination_list">
+                    <ul>
+                        {% for a in approved %}
+                        <li onclick="window.location.href='/destination/{{ a.destination_id }}'">
+                            <span class="img_container">
+                                <img src="{{ a.image.url }}">
+                            </span>
+                            <h3>{{ a.destination_name }}</h3>
+                        </li>
+                        {% endfor %}
+                    </ul>
+            </div>
+        {% else %}
+            <p>You have no approved bookings.</p>
+        {% endif %}
+
+        <h3>Pending</h3>
+        {% if pending is not None %}
+            <div class="destination_list">
+                    <ul>
+                        {% for p in pending %}
+                        <li onclick="window.location.href='/destination/{{ p.destination_id }}'">
+                            <span class="img_container">
+                                <img src="{{ p.image.url }}">
+                            </span>
+                            <h3>{{ p.destination_name }}</h3>
+                        </li>
+                        {% endfor %}
+                    </ul>
+            </div>
+        {% else %}
+            <p>You have no pending bookings.</p>
+        {% endif %}
+
+        <h3>Failed</h3>
+        {% if failed is not None %}
+            <div class="destination_list">
+                    <ul>
+                        {% for f in failed %}
+                        <li onclick="window.location.href='/destination/{{ f.destination_id }}'">
+                            <span class="img_container">
+                                <img src="{{ f.image.url }}">
+                            </span>
+                            <h3>{{ f.destination_name }}</h3>
+                        </li>
+                        {% endfor %}
+                    </ul>
+            </div>
+        {% else %}
+            <p>You have no failed bookings.</p>
+        {% endif %}
+    </section>
+{% endblock %}

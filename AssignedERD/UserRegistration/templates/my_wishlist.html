@@ -8,7 +8,7 @@
         <div class="wishlist_wrapper">
             <h2>My Wishlist</h2>
 
-            <div class="desination_list">
+            <div class="destination_list">
                 <ul>
                     {% for d in user.wishlist.all %}
                     <li onclick="window.location.href='{% url 'UserRegistration:destination' d.destination_id %}'">
