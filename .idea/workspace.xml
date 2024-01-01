@@ -5,18 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="84ca4012-8eb8-467f-a922-d96dd9f6d2de" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/AssignedERD/UserRegistration/templates/book_order.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/AssignedERD/UserRegistration/templates/edit_destination.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/AssignedERD/UserRegistration/templates/my_bookings.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AssignedERD/UserRegistration/static/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/AssignedERD/UserRegistration/static/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AssignedERD/UserRegistration/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/AssignedERD/UserRegistration/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AssignedERD/UserRegistration/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/AssignedERD/UserRegistration/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AssignedERD/UserRegistration/templates/display_destination.html" beforeDir="false" afterPath="$PROJECT_DIR$/AssignedERD/UserRegistration/templates/display_destination.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AssignedERD/UserRegistration/templates/header.html" beforeDir="false" afterPath="$PROJECT_DIR$/AssignedERD/UserRegistration/templates/header.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AssignedERD/UserRegistration/templates/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/AssignedERD/UserRegistration/templates/home.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AssignedERD/UserRegistration/templates/manage_destinations.html" beforeDir="false" afterPath="$PROJECT_DIR$/AssignedERD/UserRegistration/templates/manage_destinations.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AssignedERD/UserRegistration/templates/my_account.html" beforeDir="false" afterPath="$PROJECT_DIR$/AssignedERD/UserRegistration/templates/my_account.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AssignedERD/UserRegistration/templates/my_wishlist.html" beforeDir="false" afterPath="$PROJECT_DIR$/AssignedERD/UserRegistration/templates/my_wishlist.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AssignedERD/UserRegistration/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/AssignedERD/UserRegistration/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AssignedERD/UserRegistration/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/AssignedERD/UserRegistration/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -60,5 +53,15 @@
       <updated>1703168406047</updated>
     </task>
     <servers />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/AssignedERD/UserRegistration/admin.py</url>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

@@ -10,7 +10,7 @@
 
             <div class="destination_list">
                 <ul>
-                    {% for d in user.wishlist.all %}
+                    {% for d in destination %}
                     <li onclick="window.location.href='{% url 'UserRegistration:destination' d.destination_id %}'">
                         <span class="img_container">
                             <img src="{{ d.image.url }}">

@@ -11,10 +11,10 @@
                 <h1>{{ destination.destination_name }}</h1>
                 <p>{{ destination.description }}</p>
                 
-                {% if not in_wishlist %}
-                    <span class="button_container"><button id="add_to_wishlist" onclick="window.location.href='{% url 'UserRegistration:add_wishlist' %}'">Add to Wishlist</button></span>
-                {% else %}
+                {% if request.session.in_wishlist %}
                     <h3>Added to wishlist. <a href="{% url 'UserRegistration:my_wishlist' %}">Browse Wishlist</a></h3>
+                {% else %}
+                    <span class="button_container"><button id="add_to_wishlist" onclick="window.location.href='{% url 'UserRegistration:add_wishlist' %}'">Add to Wishlist</button></span>
                 {% endif %}
 
                 {% if request.session.in_bookings %}

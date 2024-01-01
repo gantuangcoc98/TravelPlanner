@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404, render, redirect
-from .models import User, Destination, BookOrder
+from .models import User, Destination, BookOrder, Wishlist
 from .forms import UserLogin, UserRegistration
 from django.http import HttpResponse
 from django.db import connection
@@ -23,7 +23,8 @@ def home(request):
         'user': user,
         'admin': admin,
     }
-    
+
+    print(destination)
     return render(request, 'home.html', context)
 
 def register(request):
@@ -121,9 +122,6 @@ def my_account(request):
 
 def my_bookings(request):
     user_id = request.session.get('user_id', None)
-    approved = None
-    pending = None
-    failed = None
 
     if user_id is not None:
         with connection.cursor() as cursor:
@@ -160,63 +158,82 @@ def my_bookings(request):
         return redirect('/signin/')
 
 def manage_bookings(request):
-    admin = User.objects.get(user_id=request.session.get('admin_id'))
+    admin_validated = request.session.get('admin_validated', None)
+
+    if admin_validated:
+        admin = User.objects.get(user_id=request.session.get('admin_id'))
     
-    return render(request, 'manage_bookings.html', {'admin': admin})
+        return render(request, 'manage_bookings.html', {'admin': admin})
+    else:
+        return redirect('/signin')
 
 def manage_destinations(request):
-    destination = Destination.objects.all()
-    admin = User.objects.get(user_id=request.session.get('admin_id'))
+    admin_validated = request.session.get('admin_validated', None)
 
-    context = {
-        'admin': admin,
-        'destination': destination,
-    }
+    if admin_validated:
+        destination = Destination.objects.all()
+        admin = User.objects.get(user_id=request.session.get('admin_id'))
 
-    return render(request, 'manage_destinations.html', context)
+        context = {
+            'admin': admin,
+            'destination': destination,
+        }
+
+        return render(request, 'manage_destinations.html', context)
+    else:
+        return redirect('/signin/')
 
 def display_destination(request, destination_id):
     destination = get_object_or_404(Destination, pk=destination_id)
     request.session['destination_id'] = destination.destination_id
     request.session['on_destination'] = True
+    user_validated = request.session.get('user_validated', None)
 
-    user = None
-    in_wishlist = None
-
-    if request.session.get('user_validated'):
-        user = User.objects.get(user_id=request.session.get('user_id'))
-        in_wishlist = destination in user.wishlist.all()
-        request.session['in_bookings'] = BookOrder.objects.filter(user_id=user.user_id, destination_id=destination.destination_id).exists()
+    if user_validated:
+        user_id = request.session.get('user_id')
+        request.session['in_bookings'] = BookOrder.objects.filter(user_id=user_id, destination_id=destination.destination_id).exists()
+        request.session['in_wishlist'] = Wishlist.objects.filter(user_id=user_id, destination_id=destination.destination_id).exists()
 
     context = {
-        'destination': destination,
-        'in_wishlist': in_wishlist
+        'destination': destination
     }
     
     return render(request, 'display_destination.html', context)
 
 def display_wishlist(request):
-    admin = None
-    user = None
-    if request.session.get('admin_validated'):
-        admin = User.objects.get(user_id=request.session.get('admin_id'))
+    user_validated = request.session.get('user_validated', None)
+
+    if user_validated:
+        user_id = request.session.get('user_id')
+
+        with connection.cursor() as cursor:
+            cursor.callproc('getWishlist', [user_id])
+            results = cursor.fetchall()
+
+            destination = [Destination(
+                destination_id=row[0],
+                destination_name=row[1],
+                image=row[4],
+            ) for row in results]
+
+        context = {
+            'destination': destination,
+        }
+
+        return render(request, 'my_wishlist.html', context)
     else:
-        user = User.objects.get(user_id=request.session.get('user_id'))
-    
-    context = {
-        'user': user,
-        'admin': admin,
-    }
-    
-    return render(request, 'my_wishlist.html', context)
+        return redirect('/signin/')
 
 def add_wishlist(request):
+    user_validated = request.session.get('user_validated')
     destination = Destination.objects.get(destination_id=request.session.get('destination_id'))
     
-    if request.session.get('user_validated'):
+    if user_validated:
         user = User.objects.get(user_id=request.session.get('user_id'))
-        user.wishlist.add(destination)
-        user.save()
+        wishlist = Wishlist.objects.create(
+            user_id=user,
+            destination_id=destination
+        )
         
         return redirect('/destination/' + str(destination.destination_id))
     else:

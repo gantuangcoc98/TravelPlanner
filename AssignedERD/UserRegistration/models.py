@@ -25,7 +25,6 @@ class User(models.Model):
     first_name = models.CharField(max_length=20)
     last_name = models.CharField(max_length=20)
     contact_number = models.CharField(max_length=15)
-    wishlist = models.ManyToManyField(Destination, blank=True)
 
     def __str__(self):
         return self.username
@@ -56,3 +55,11 @@ class BookOrder(models.Model):
 
     def __str__(self):
         return str(self.book_id)
+
+class Wishlist(models.Model):
+    wishlist_id = models.BigAutoField(primary_key=True)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    destination_id = models.ForeignKey(Destination, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return str(self.wishlist_id)
